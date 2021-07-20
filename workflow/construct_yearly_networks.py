@@ -25,15 +25,21 @@ if __name__ == "__main__":
     # Count the number of papers for each Affiliation
     ys = YEAR - WINDOW_LENGTH
     yf = YEAR
+    field = "computer science"
     query = """
-    MATCH (jtrg:Affiliations)<-[:published_from]-(trg:Paper)<-[:cites]-(src:Paper {Year:%d})-[:published_from]->(jsrc:Affiliations)
-    where trg.Year<%d and trg.Year >= %d
+    MATCH (ftrg:FieldsOfStudy)<-[:field_of_study]-(trg:Paper)<-[:cites]-(src:Paper {Year:%d})-[:field_of_study]->(fsrc:FieldsOfStudy)
+    WHERE trg.Year<%d and trg.Year >= %d and ftrg.NormalizedName=%s and fsrc.NormalizedName=%s
+    WITH src, trg, ftrg, fsrc
+    MATCH (src)-[:published_from]->(jsrc:Affiliations)
+    MATCH (jtrg:Affiliations)<-[:published_from]-(trg)
     return DISTINCT toInteger(jsrc.AffiliationId) as source, toInteger(jtrg.AffiliationId) as target, toInteger(trg.PaperId) as p_target, toInteger(src.PaperId) as s_target
     LIMIT 1000
     """ % (
         yf,
         yf,
         ys,
+        field,
+        field,
     )
 
     edges = graph.run(query).to_data_frame()
