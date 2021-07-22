@@ -16,8 +16,8 @@ if __name__ == "__main__":
     MATCH (src:Paper)-[:field_of_study]->(f:FieldsOfStudy)
     WHERE f.NormalizedName=%s 
     WITH src
-    MATCH (src)-[:published_from]->(j:Affiliations)
-    return j.AffiliationId as id, count(DISTINCT p) as pcount, p.Year as year
+    MATCH (src)-[:published_from_journal]->(j:Journal)
+    return j.JournalId as id, count(DISTINCT p) as pcount, p.Year as year
     """ % (
         field,
     )
