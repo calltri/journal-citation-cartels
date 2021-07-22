@@ -24,6 +24,19 @@ def load_valid_cartel(year, cartel_dir):
     cartel_table["year"] = year
     return cartel_table
 
+def get_affiliation_name(graph, id):
+    """Given database and id returns the display name"""
+
+    # Compute the paper count first
+    query = """ 
+    MATCH (f:FieldsOfStudy)
+    WHERE f.FieldsOfStudyId=%d 
+    return f.DisplayName
+    """ % (
+        id,
+    )
+    df = graph.run(query)
+
 # python workflow/plot-all-cartels.py data/cartels data/figs data/networks 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011 2012 2013 2014 2015 2016 2017 2018
 if __name__ == '__main__':
     CARTEL_DIR = sys.argv[1]
@@ -31,6 +44,8 @@ if __name__ == '__main__':
     NETWORK_DIR = sys.argv[3]
     YEARS = [int(y) for y in sys.argv[4:]]
     theta = 0.15
+    graph = utils.get_db()
+
     # For each year make plots
     for year in YEARS:
         citation_group_table = load_valid_cartel(year, CARTEL_DIR)
@@ -51,7 +66,8 @@ if __name__ == '__main__':
         sns.set_style("ticks")
 
         # Set the name of each node
-        citation_group_table["name"] = citation_group_table["node_id"].apply(lambda x : str(x))
+        citation_group_table["name"] = citation_group_table["node_id"].apply(lambda x : get_affiliation_name(graph, x))
+        for 
 
         for cid, cartel in citation_group_table.groupby("group_id"):
             dc.draw(
