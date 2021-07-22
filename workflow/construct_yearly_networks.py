@@ -28,7 +28,7 @@ if __name__ == "__main__":
     field = "computer science"
     query = """
     MATCH (ftrg:FieldsOfStudy)<-[:field_of_study]-(trg:Paper)<-[:cites]-(src:Paper {Year:%d})-[:field_of_study]->(fsrc:FieldsOfStudy)
-    WHERE trg.Year<%d and trg.Year >= %d and ftrg.NormalizedName=%s and fsrc.NormalizedName=%s
+    WHERE trg.Year<%d and trg.Year >= %d and ftrg.NormalizedName="%s" and fsrc.NormalizedName="%s"
     WITH src, trg, ftrg, fsrc
     MATCH (src)-[:published_from_journal]->(jsrc:Journal)
     MATCH (jtrg:Journal)<-[:published_from_journal]-(trg)

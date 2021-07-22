@@ -14,13 +14,14 @@ if __name__ == "__main__":
     field = "computer science"
     query = """ 
     MATCH (src:Paper)-[:field_of_study]->(f:FieldsOfStudy)
-    WHERE f.NormalizedName=%s 
+    WHERE f.NormalizedName="%s" 
     WITH src
     MATCH (src)-[:published_from_journal]->(j:Journal)
     return j.JournalId as id, count(DISTINCT p) as pcount, p.Year as year
     """ % (
         field,
     )
+    
     df = graph.run(query).to_data_frame()
 
     df.to_csv(PAPER_COUNT_FILE, sep="\t")
