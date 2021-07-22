@@ -28,12 +28,11 @@ if __name__ == "__main__":
     field = "computer science"
     query = """
     MATCH (ftrg:FieldsOfStudy)<-[:field_of_study]-(trg:Paper)<-[:cites]-(src:Paper {Year:%d})-[:field_of_study]->(fsrc:FieldsOfStudy)
-    WHERE trg.Year<%d and trg.Year >= %d and ftrg.NormalizedName=%s and fsrc.NormalizedName=%s
+    WHERE trg.Year<%d and trg.Year >= %d and ftrg.NormalizedName="%s" and fsrc.NormalizedName="%s"
     WITH src, trg, ftrg, fsrc
     MATCH (src)-[:published_from]->(jsrc:Affiliations)
     MATCH (jtrg:Affiliations)<-[:published_from]-(trg)
     return DISTINCT toInteger(jsrc.AffiliationId) as source, toInteger(jtrg.AffiliationId) as target, toInteger(trg.PaperId) as p_target, toInteger(src.PaperId) as s_target
-    LIMIT 1000
     """ % (
         yf,
         yf,
