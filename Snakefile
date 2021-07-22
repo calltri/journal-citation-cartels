@@ -155,7 +155,7 @@ rule construct_yearly_networks:
         year = lambda wildcards: wildcards.year
     run:
         shell("python3 workflow/construct_yearly_networks.py {input} {NETWORK_DIR} {params.year} {WINDOW_LENGTH} {output.node} {output.edge}")
-# python3 workflow/construct_yearly_networks.py data/networks/paper_count.csv data/networks 2009 9999 data/networks/nodes-2009.csv data/networks/edges-2009.csv
+# python3 workflow/construct_yearly_networks.py data/networks/paper_count.csv data/networks 2011 2 data/networks/nodes-2011.csv data/networks/edges-2011.csv
 
 rule construct_yearly_raw_networks:
     input: PAPER_COUNT_FILE
@@ -166,7 +166,7 @@ rule construct_yearly_raw_networks:
         year = lambda wildcards: wildcards.year
     run:
         shell("python3 workflow/construct_yearly_networks.py {input} {NETWORK_DIR} {params.year} 9999 {output.node} {output.edge}")
-# python3 workflow/construct_yearly_networks.py data/networks/paper_count.csv data/networks 2009 9999 data/networks/raw-nodes-2009.csv data/networks/raw-edges-2009.csv 
+# python3 workflow/construct_yearly_networks.py data/networks/paper_count.csv data/networks 2004 9999 data/networks/raw-nodes-2004.csv data/networks/raw-edges-2004.csv 
 
 rule detect_communities:
     input: YEARLY_NODE_FILE_ALL, YEARLY_EDGE_FILE_ALL, RAW_YEARLY_NODE_FILE_ALL, RAW_YEARLY_EDGE_FILE_ALL
@@ -175,7 +175,7 @@ rule detect_communities:
         years = " ".join(["%d" %d for d in AGGREGATED_YEARS]) 
     run:
         shell("python3 workflow/community_detection.py {params.years} {output}")
-# python workflow/community_detection.py 2009 data/community/aggregated-community.csv
+# python workflow/community_detection.py 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011 2012 2013 2014 2015 2016 2017 2018 data/community/aggregated-community.csv
 # 2000 2001 2002 2003 2004 2005 2006 2007 2008 
 rule detect_cartels: 
     input: DETECTED_CARTEL_FILE_ALL
@@ -187,7 +187,7 @@ rule detect_cartels_yearly:
         year = lambda wildcards : wildcards.year 
     run:
         shell("python3 workflow/detect_cartels.py {params.year} {NETWORK_DIR} {THETA_CIDRE} {ALPHA_CIDRE} {DETECTED_COMMUNITY_FILE} {output}")
-# python workflow/detect_cartels.py 2009 data/networks 0.15 0.01 data/community/aggregated-community.csv data/cartels/cartels-2009.csv
+# python workflow/detect_cartels.py 2001 data/networks 0.15 0.01 data/community/aggregated-community.csv data/cartels/cartels-2001.csv
 
 # Irrelevant as not looking into journals?
 # rule match_mag_wos_suspended_journals_by_TR: 
