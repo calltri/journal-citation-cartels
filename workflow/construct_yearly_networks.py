@@ -33,7 +33,6 @@ if __name__ == "__main__":
     MATCH (src)-[:published_from]->(jsrc:Affiliations)
     MATCH (jtrg:Affiliations)<-[:published_from]-(trg)
     return DISTINCT toInteger(jsrc.AffiliationId) as source, toInteger(jtrg.AffiliationId) as target, toInteger(trg.PaperId) as p_target, toInteger(src.PaperId) as s_target
-    LIMIT 1000
     """ % (
         yf,
         yf,
