@@ -8,7 +8,7 @@ import sys
 import matplotlib.colors as colors
 from matplotlib import cm
 import os
-import plot-all-cartels as pac
+import plot_all_cartels as pac
 
 if __name__ == "__main__":
     CARTEL_DIR = sys.argv[1]
@@ -20,14 +20,14 @@ if __name__ == "__main__":
 
     # For each year make plots
     for year in YEARS:
-        citation_group_table = pac.plotload_valid_cartel(year, CARTEL_DIR)
+        citation_group_table = pac.load_valid_cartel(year, CARTEL_DIR)
 
         # Skip years that have nothing
         if citation_group_table.empty:
             continue
 
         # Set the name of each node
-        citation_group_table["name"] = citation_group_table["mag_affiliation_name"].apply(lambda x : str(pac.get_affiliation_name(graph, x)))
+        citation_group_table["name"] = citation_group_table["mag_affiliation_id"].apply(lambda x : str(pac.get_affiliation_name(graph, x)))
         all_citations.append(citation_group_table)
 
     all_citations.to_csv("{root}/all_affiliations.csv".format(root=CARTEL_DIR), sep="\t")
