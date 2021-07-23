@@ -15,13 +15,16 @@ def load_detected_cartels(years, cartel_dir):
     cartel_table_list = []
     group_id_offset = 0
     for year in years:
-        cartel_table = pd.read_csv(
-            "{root}/cartels-{year}.csv".format(root=cartel_dir, year=year), sep="\t"
-        )
-        cartel_table["year"] = year
-        cartel_table["group_id"] += group_id_offset
-        group_id_offset = np.max(cartel_table["group_id"].values) + 1
-        cartel_table_list += [cartel_table]
+        try:
+            cartel_table = pd.read_csv(
+                "{root}/cartels-{year}.csv".format(root=cartel_dir, year=year), sep="\t"
+            )
+            cartel_table["year"] = year
+            cartel_table["group_id"] += group_id_offset
+            group_id_offset = np.max(cartel_table["group_id"].values) + 1
+            cartel_table_list += [cartel_table]
+        except FileNotFoundError:
+            continue
     cartel_table = pd.concat(cartel_table_list, ignore_index=True)
     return cartel_table
 
@@ -31,7 +34,7 @@ if __name__ == "__main__":
     CARTEL_DIR = sys.argv[1]
     OUTPUT = sys.argv[2]
     start_year = 2000
-    end_year = 2007
+    end_year = 2018 + 1
 
     cartel_table = load_detected_cartels(np.arange(start_year, end_year), CARTEL_DIR)
 
@@ -50,6 +53,16 @@ if __name__ == "__main__":
         .reset_index()
         .rename(columns={0: "sz"})
     )
+    for year in range(start_year, end_year):
+       
+        if not num_cartel.isin([year]).any().any():
+            print(year)
+            num_cartel = num_cartel.append(pd.DataFrame({'year': year, 'num_cartel': 0}, index=[year-2000]))
+            cartel_sz = cartel_sz.append(pd.DataFrame({'year': year, 'group_id': 0, 'sz': 0}, index=[year-2000]))
+    num_cartel = num_cartel.sort_values(by=['year'])
+    cartel_sz = cartel_sz.sort_values(by=['year'])
+    print(num_cartel)
+    print(cartel_sz)
 
     # Compute the maximum size for each year
     maxsz = (
@@ -59,6 +72,7 @@ if __name__ == "__main__":
         .rename(columns={0: "sz"})
     )
     maxsz["year"] = maxsz["year"] - 2000
+      
 
     # Set up the canvas
     sns.set_style("white")
@@ -82,7 +96,7 @@ if __name__ == "__main__":
     ax.set_xlabel("Year")
 
     # Ticks
-    ax.set_xticks(np.arange(0, start_year - end_year, 2))
+    ax.set_xticks(np.arange(0, end_year - start_year, 2))
     ax.set_xticklabels(["`%02d" % d for d in np.arange(start_year, end_year, 2) - 2000])
 
     #
@@ -102,7 +116,7 @@ if __name__ == "__main__":
 
     ax.set_ylabel("Number of Affiliations in a Cartel")
     ax.set_xlabel("Year")
-    ax.set_xticks(np.arange(0, start_year - end_year, 2))
+    ax.set_xticks(np.arange(0, end_year - start_year, 2))
     ax.set_xticklabels(["`%02d" % d for d in np.arange(start_year, end_year, 2) - 2000])
 
     # Annotate

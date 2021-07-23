@@ -30,13 +30,14 @@ def get_affiliation_name(graph, id):
     # Compute the paper count first
     query = """ 
     MATCH (a:Affiliations)
-    WHERE a.AffiliationId=%d 
+    WHERE a.AffiliationId="%d" 
     return a.NormalizedName
     """ % (
         id,
     )
-    df = graph.run(query)
-
+    df = graph.run(query).data()
+    df = df[0]['a.NormalizedName']
+    print("{id}: {name}".format(id=id, name=df))
     return df
 
 # python workflow/plot-all-cartels.py data/cartels data/figs data/networks 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011 2012 2013 2014 2015 2016 2017 2018
@@ -68,7 +69,7 @@ if __name__ == '__main__':
         sns.set_style("ticks")
 
         # Set the name of each node
-        citation_group_table["name"] = citation_group_table["node_id"].apply(lambda x : str(get_affiliation_name(graph, x)))
+        citation_group_table["name"] = citation_group_table["mag_affiliation_id"].apply(lambda x : str(get_affiliation_name(graph, x)))
          
 
         for cid, cartel in citation_group_table.groupby("group_id"):
