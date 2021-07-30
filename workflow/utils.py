@@ -45,7 +45,7 @@ def load_network(years, net_data_dir=None):
         years = [years]
 
     if net_data_dir is None:
-        net_data_dir = "%s/networks/" % DATA_DIR
+        net_data_dir = "%s/journal_networks/" % DATA_DIR
 
     # Load the node and edge files
     df_nodes = []

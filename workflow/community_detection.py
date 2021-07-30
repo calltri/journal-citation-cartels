@@ -26,7 +26,7 @@ def to_graph_tool(adj, membership=None):
 def make_community_table(states, nodes):
     b = states.get_blocks()
     cids = b.a
-    return pd.DataFrame({"node_id":np.arange(nodes.size), "mag_affiliation_id": nodes, "community_id": cids})
+    return pd.DataFrame({"node_id":np.arange(nodes.size), "mag_journal_id": nodes, "community_id": cids})
 
 
 if __name__ == "__main__":
