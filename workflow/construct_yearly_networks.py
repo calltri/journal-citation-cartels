@@ -25,7 +25,7 @@ if __name__ == "__main__":
     # Count the number of papers for each Affiliation
     ys = YEAR - WINDOW_LENGTH
     yf = YEAR
-    field = "computer science"
+    field = "psychology"
     query = """
     MATCH (ftrg:FieldsOfStudy)<-[:field_of_study]-(trg:Paper)<-[:cites]-(src:Paper {Year:%d})-[:field_of_study]->(fsrc:FieldsOfStudy)
     WHERE trg.Year<%d and trg.Year >= %d and ftrg.NormalizedName="%s" and fsrc.NormalizedName="%s"
