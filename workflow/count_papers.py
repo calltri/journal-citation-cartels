@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     # Compute the paper count first
     # TODO get only unique relationships
-    field = "computer science"
+    field = "psychology"
     query = """ 
     MATCH (p:Paper)-[:field_of_study]->(f:FieldsOfStudy)
     WHERE f.NormalizedName="%s" 
