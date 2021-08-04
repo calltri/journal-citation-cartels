@@ -9,5 +9,5 @@ if __name__ == "__main__":
 
     for year in YEARS:
         subprocess.Popen(['python3', 'workflow/construct_yearly_networks.py', 'data/networks/paper_count.csv', 'data/networks', str(year), '2', 'data/networks/nodes-{year}.csv'.format(year=year), 'data/networks/edges-{year}.csv'.format(year=year)])
-        subprocess.Popen(['python3', 'workflow/construct_yearly_networks.py', 'data/networks/paper_count.csv', 'data/networks', str(year), '9999', 'data/networks/raw-nodes-{year}.csv'.format(year=year), 'data/journal/raw-edges-{year}.csv'.format(year=year)])
+        subprocess.Popen(['python3', 'workflow/construct_yearly_networks.py', 'data/networks/paper_count.csv', 'data/networks', str(year), '9999', 'data/networks/raw-nodes-{year}.csv'.format(year=year), 'data/networks/raw-edges-{year}.csv'.format(year=year)])
 
